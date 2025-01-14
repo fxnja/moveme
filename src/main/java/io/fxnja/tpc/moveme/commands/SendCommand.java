@@ -112,7 +112,7 @@ public record SendCommand(ProxyServer proxyServer, MoveMe instance, Logger logge
             if(source.hasPermission("mvm.send.all")) targetPlayersSuggests.add("all");
             if(source.hasPermission("mvm.send.current")) targetPlayersSuggests.add("current");
             if(source.hasPermission("mvm.send.server")) targetPlayersSuggests.addAll(proxyServer.getAllServers().stream().map(server -> server.getServerInfo().getName()).toList());
-            if(source.hasPermission("mvm.send.user")) targetPlayersSuggests.addAll(proxyServer.getAllPlayers().stream().map(Player::getUsername).toList());
+            if(source.hasPermission("mvm.send.player")) targetPlayersSuggests.addAll(proxyServer.getAllPlayers().stream().map(Player::getUsername).toList());
 
             return currentArgs.length < 1 ? targetPlayersSuggests : targetPlayersSuggests.stream().filter(s -> s.startsWith(currentArgs[0])).toList();
         }
@@ -125,7 +125,7 @@ public record SendCommand(ProxyServer proxyServer, MoveMe instance, Logger logge
         return ImmutableList.of();
     }
 
-    private static boolean checkPermissionAndReport(CommandSource source, String permission) {
+    public static boolean checkPermissionAndReport(CommandSource source, String permission) {
         if(!source.hasPermission(permission)) {
             source.sendMessage(Component.text("§cYou are lacking the permission node §f%s §cto use this command.".formatted(permission)));
             return false;

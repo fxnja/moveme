@@ -6,6 +6,8 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import io.fxnja.tpc.moveme.commands.BroadcastCommand;
+import io.fxnja.tpc.moveme.commands.ListenerStandard;
 import io.fxnja.tpc.moveme.commands.SendCommand;
 import org.slf4j.Logger;
 
@@ -31,6 +33,7 @@ public class MoveMe {
 
     @Inject
     public MoveMe(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
+        instance = this;
         this.server = server;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
@@ -40,6 +43,10 @@ public class MoveMe {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         logger.info("Initialized MoveMe (preview) by @Fxnja");
         new SendCommand(server, this, logger);
+        new BroadcastCommand(server, this, logger);
+        server.getEventManager().register(this, new ListenerStandard(server));
     }
+
+    public static MoveMe instance;
 
 }
